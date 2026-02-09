@@ -1,0 +1,1048 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cal Poly CM - Account Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cal-poly-green: #154734;
+            --gold: #C69214;
+            --light-gold: #D4AF37;
+            --tan-text: #F5E6D3;
+            --yellow-button: #FFD700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Serif 4', serif;
+            background: var(--cal-poly-green);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: var(--tan-text);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Decorative background elements */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            right: -20%;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle, rgba(196, 146, 20, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -30%;
+            left: -15%;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+            animation: float 25s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(5deg); }
+            66% { transform: translate(-20px, 20px) rotate(-5deg); }
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--light-gold) 100%);
+            padding: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 10;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .hardhat-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--cal-poly-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            color: var(--cal-poly-green);
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: rgba(21, 71, 52, 0.8);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            background: rgba(21, 71, 52, 0.95);
+            border: 3px solid var(--gold);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            animation: slideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(135deg, var(--light-gold), var(--gold), var(--light-gold));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .container:hover::before {
+            opacity: 0.3;
+        }
+
+        .card {
+            padding: 3rem 2.5rem;
+        }
+
+        .card.hidden {
+            display: none;
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo-section .hardhat {
+            font-size: 64px;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            color: var(--tan-text);
+            text-align: center;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1.5px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--tan-text);
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+
+        .error-message {
+            background: rgba(220, 53, 69, 0.2);
+            border-left: 4px solid #dc3545;
+            color: #ff6b6b;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.3s;
+        }
+
+        .error-message.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .success-message {
+            background: rgba(40, 167, 69, 0.2);
+            border-left: 4px solid #28a745;
+            color: #4ecf6f;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.3s;
+        }
+
+        .success-message.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: white;
+            border: none;
+            font-size: 1rem;
+            font-family: 'Source Serif 4', serif;
+            font-weight: 600;
+            color: #000;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.3);
+        }
+
+        input::placeholder {
+            color: #666;
+            font-weight: 600;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--light-gold);
+            border: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            color: #000;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        button:hover {
+            background: var(--gold);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        button:disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .button-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .button-danger:hover {
+            background: #c82333;
+        }
+
+        .button-secondary {
+            background: var(--tan-text);
+            color: var(--cal-poly-green);
+            margin-top: 1rem;
+        }
+
+        .button-secondary:hover {
+            background: #e8d7c0;
+        }
+
+        .link-button {
+            background: none;
+            border: none;
+            color: var(--tan-text);
+            text-decoration: underline;
+            cursor: pointer;
+            font-family: 'Source Serif 4', serif;
+            font-size: 0.9rem;
+            padding: 0.5rem;
+            margin-top: 1rem;
+            display: block;
+            width: auto;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            transition: color 0.3s;
+        }
+
+        .link-button:hover {
+            color: var(--yellow-button);
+            transform: none;
+            box-shadow: none;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 2rem 0;
+            opacity: 0.6;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--tan-text);
+        }
+
+        .divider span {
+            padding: 0 1rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .warning-box {
+            background: rgba(220, 53, 69, 0.15);
+            border: 2px solid #dc3545;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .warning-box h3 {
+            color: #ff6b6b;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .warning-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .warning-box li {
+            padding: 0.3rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.9rem;
+        }
+
+        .warning-box li::before {
+            content: '•';
+            position: absolute;
+            left: 0.5rem;
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .google-button {
+            background: var(--tan-text);
+            color: var(--cal-poly-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .google-button:hover {
+            background: #e8d7c0;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: #000;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.85rem;
+            opacity: 0.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .card {
+                padding: 2rem 1.5rem;
+            }
+
+            .header-content {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <!-- <div class="hardhat-icon">👷</div> -->
+            <div>
+                <h1>Account Management</h1>
+                <div class="subtitle">Cal Poly Construction Management</div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Sign In Card -->
+            <div id="signInCard" class="card">
+                <!-- <div class="logo-section">
+                    <div class="hardhat">👷</div>
+                </div> -->
+
+                <h2>Sign In</h2>
+                <div class="section-subtitle">Access your account</div>
+
+                <div id="signInError" class="error-message"></div>
+
+                <form id="signInForm">
+                    <div class="form-group">
+                        <label for="signInEmail">Email</label>
+                        <input type="email" id="signInEmail" placeholder="your.email@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signInPassword">Password</label>
+                        <input type="password" id="signInPassword" placeholder="Enter your password" required>
+                    </div>
+
+                    <button type="submit" id="signInButton">
+                        <span>Sign In</span>
+                    </button>
+                </form>
+
+                <button type="button" class="link-button" id="forgotPasswordButton">Forgot Password?</button>
+
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+
+                <button type="button" class="google-button" id="googleSignInButton">
+                    <svg width="20" height="20" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    <span>Sign in with Google</span>
+                </button>
+            </div>
+
+            <!-- Account Management Card -->
+            <div id="accountCard" class="card hidden">
+                <h2>Account Settings</h2>
+                <div class="section-subtitle" id="userEmail"></div>
+
+                <div id="accountSuccess" class="success-message"></div>
+                <div id="accountError" class="error-message"></div>
+
+                <button type="button" class="button-secondary" id="showDeleteButton">
+                    <span>Delete My Account</span>
+                </button>
+
+                <button type="button" class="link-button" id="signOutButton">Sign Out</button>
+            </div>
+
+            <!-- Delete Account Card -->
+            <div id="deleteCard" class="card hidden">
+                <h2>Delete Account</h2>
+                <div class="section-subtitle">This action cannot be undone</div>
+
+                <div id="deleteError" class="error-message"></div>
+
+                <div class="warning-box">
+                    <h3>⚠️ Warning</h3>
+                    <p style="margin-bottom: 1rem;">Your account and all associated data will be permanently deleted.</p>
+                    <p style="margin-bottom: 0.5rem; font-weight: 600;">This includes:</p>
+                    <ul>
+                        <li>Profile information</li>
+                        <li>Event check-ins</li>
+                        <li>Club memberships</li>
+                        <li>Favorite companies</li>
+                        <li>All preferences</li>
+                    </ul>
+                </div>
+
+                <form id="deleteForm">
+                    <div class="form-group">
+                        <label for="deletePassword">Enter your password to confirm</label>
+                        <input type="password" id="deletePassword" placeholder="Your password" required>
+                    </div>
+
+                    <button type="submit" class="button-danger" id="deleteButton">
+                        <span>Delete Account Permanently</span>
+                    </button>
+
+                    <button type="button" class="button-secondary" id="cancelDeleteButton">
+                        <span>Cancel</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Forgot Password Card -->
+            <div id="forgotPasswordCard" class="card hidden">
+                <h2>Reset Password</h2>
+                <div class="section-subtitle">We'll send you a reset link</div>
+
+                <div id="forgotError" class="error-message"></div>
+                <div id="forgotSuccess" class="success-message"></div>
+
+                <form id="forgotPasswordForm">
+                    <div class="form-group">
+                        <label for="resetEmail">Email Address</label>
+                        <input type="email" id="resetEmail" placeholder="your.email@example.com" required>
+                    </div>
+
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 1.5rem;">
+                        Note: Check your spam/junk folder if you don't see the email.
+                    </p>
+
+                    <button type="submit" id="sendResetButton">
+                        <span>Send Reset Link</span>
+                    </button>
+
+                    <button type="button" class="link-button" id="backToSignInButton">Back to Sign In</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2026 Cal Poly Construction Management. All rights reserved.
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, EmailAuthProvider, reauthenticateWithCredential, deleteUser, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, doc, getDoc, deleteDoc, collection, getDocs, writeBatch } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getStorage, ref as storageRef, deleteObject } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
+        import { collectionGroup, query, where } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        // import { getAuth } from "firebase/auth";
+
+        // ⚠️ IMPORTANT: Replace with your actual Firebase config
+        const firebaseConfig = {
+            apiKey: 'AIzaSyBFHe6lPV3cZBcG9gm1zT2EwHNRmOLpP8I',
+            appId: '1:913522987647:web:77ec67ff2a1e736999a54a',
+            messagingSenderId: '913522987647',
+            projectId: 'cm-app-90d65',
+            authDomain: 'cm-app-90d65.firebaseapp.com',
+            storageBucket: 'cm-app-90d65.appspot.com',
+            measurementId: 'G-NNYFG8919W',
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // DOM Elements
+        const signInCard = document.getElementById('signInCard');
+        const accountCard = document.getElementById('accountCard');
+        const deleteCard = document.getElementById('deleteCard');
+        const forgotPasswordCard = document.getElementById('forgotPasswordCard');
+
+        const signInForm = document.getElementById('signInForm');
+        const signInButton = document.getElementById('signInButton');
+        const googleSignInButton = document.getElementById('googleSignInButton');
+        const signInError = document.getElementById('signInError');
+
+        const showDeleteButton = document.getElementById('showDeleteButton');
+        const signOutButton = document.getElementById('signOutButton');
+        const userEmail = document.getElementById('userEmail');
+        const accountSuccess = document.getElementById('accountSuccess');
+        const accountError = document.getElementById('accountError');
+
+        const deleteForm = document.getElementById('deleteForm');
+        const deleteButton = document.getElementById('deleteButton');
+        const cancelDeleteButton = document.getElementById('cancelDeleteButton');
+        const deleteError = document.getElementById('deleteError');
+
+        const forgotPasswordButton = document.getElementById('forgotPasswordButton');
+        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+        const backToSignInButton = document.getElementById('backToSignInButton');
+        const forgotError = document.getElementById('forgotError');
+        const forgotSuccess = document.getElementById('forgotSuccess');
+        const sendResetButton = document.getElementById('sendResetButton');
+
+        // Utility Functions
+        function showCard(card) {
+            [signInCard, accountCard, deleteCard, forgotPasswordCard].forEach(c => c.classList.add('hidden'));
+            card.classList.remove('hidden');
+        }
+
+        function showError(element, message) {
+            element.textContent = message;
+            element.classList.add('show');
+        }
+
+        function hideError(element) {
+            element.classList.remove('show');
+            setTimeout(() => element.textContent = '', 300);
+        }
+
+        function showSuccess(element, message) {
+            element.textContent = message;
+            element.classList.add('show');
+        }
+
+        function hideSuccess(element) {
+            element.classList.remove('show');
+            setTimeout(() => element.textContent = '', 300);
+        }
+
+        function setButtonLoading(button, loading) {
+            if (loading) {
+                button.disabled = true;
+                const span = button.querySelector('span');
+                span.innerHTML = '<span class="loading"></span> Loading...';
+            } else {
+                button.disabled = false;
+                // Reset button text to original
+                const span = button.querySelector('span');
+                if (button === signInButton) span.textContent = 'Sign In';
+                else if (button === deleteButton) span.textContent = 'Delete Account Permanently';
+                else if (button === sendResetButton) span.textContent = 'Send Reset Link';
+                else if (button === googleSignInButton) span.textContent = 'Sign in with Google';
+            }
+        }
+
+        // Auth State Observer
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                userEmail.textContent = user.email;
+                showCard(accountCard);
+            } else {
+                showCard(signInCard);
+            }
+        });
+
+        // Sign In with Email/Password
+        signInForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideError(signInError);
+
+            const email = document.getElementById('signInEmail').value.trim();
+            const password = document.getElementById('signInPassword').value.trim();
+
+            if (!email || !password) {
+                showError(signInError, 'Email and password cannot be blank.');
+                return;
+            }
+
+            setButtonLoading(signInButton, true);
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                
+                // if (!userCredential.user.emailVerified) {
+                //     showError(signInError, 'Please verify your email before signing in.');
+                //     await signOut(auth);
+                //     setButtonLoading(signInButton, false);
+                //     return;
+                // }
+
+                // Success - will be handled by auth state observer
+            } catch (error) {
+                let message = 'An unexpected error occurred.';
+                
+                if (error.code === 'auth/wrong-password' || 
+                    error.code === 'auth/invalid-credential' || 
+                    error.code === 'auth/invalid-login-credentials') {
+                    message = 'Invalid email or password.';
+                } else if (error.code === 'auth/invalid-email') {
+                    message = 'The email address is badly formatted.';
+                } else if (error.code === 'auth/user-not-found') {
+                    message = 'No user found with this email.';
+                } else if (error.code === 'auth/user-disabled') {
+                    message = 'This user account has been disabled.';
+                } else if (error.code === 'auth/too-many-requests') {
+                    message = 'Too many attempts. Please try again later.';
+                }
+                
+                showError(signInError, message);
+                setButtonLoading(signInButton, false);
+            }
+        });
+
+        // Sign In with Google
+        googleSignInButton.addEventListener('click', async () => {
+            hideError(signInError);
+            setButtonLoading(googleSignInButton, true);
+
+            try {
+                const provider = new GoogleAuthProvider();
+                await signInWithPopup(auth, provider);
+                // Success - handled by auth state observer
+            } catch (error) {
+                let message = 'Failed to sign in with Google.';
+                
+                if (error.code === 'auth/popup-closed-by-user') {
+                    message = 'Sign-in cancelled.';
+                } else if (error.code === 'auth/account-exists-with-different-credential') {
+                    message = 'An account already exists with this email.';
+                }
+                
+                showError(signInError, message);
+                setButtonLoading(googleSignInButton, false);
+            }
+        });
+
+        // Forgot Password
+        forgotPasswordButton.addEventListener('click', () => {
+            showCard(forgotPasswordCard);
+            hideError(signInError);
+        });
+
+        backToSignInButton.addEventListener('click', () => {
+            showCard(signInCard);
+            hideError(forgotError);
+            hideSuccess(forgotSuccess);
+        });
+
+        forgotPasswordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideError(forgotError);
+            hideSuccess(forgotSuccess);
+
+            const email = document.getElementById('resetEmail').value.trim();
+
+            if (!email) {
+                showError(forgotError, 'Please enter your email address.');
+                return;
+            }
+
+            setButtonLoading(sendResetButton, true);
+
+            try {
+                await sendPasswordResetEmail(auth, email);
+                showSuccess(forgotSuccess, `Password reset email sent to ${email}. Check your spam folder if you don't see it.`);
+                document.getElementById('resetEmail').value = '';
+            } catch (error) {
+                let message = 'Failed to send reset email.';
+                
+                if (error.code === 'auth/user-not-found') {
+                    message = 'No account found with this email.';
+                } else if (error.code === 'auth/invalid-email') {
+                    message = 'Invalid email address.';
+                } else if (error.code === 'auth/too-many-requests') {
+                    message = 'Too many attempts. Try again later.';
+                }
+                
+                showError(forgotError, message);
+            } finally {
+                setButtonLoading(sendResetButton, false);
+            }
+        });
+
+        // Show Delete Account Card
+        showDeleteButton.addEventListener('click', () => {
+            showCard(deleteCard);
+            hideError(accountError);
+            hideSuccess(accountSuccess);
+        });
+
+        // Cancel Delete
+        cancelDeleteButton.addEventListener('click', () => {
+            showCard(accountCard);
+            hideError(deleteError);
+            document.getElementById('deletePassword').value = '';
+        });
+
+        // Delete Account
+        deleteForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideError(deleteError);
+
+            const password = document.getElementById('deletePassword').value.trim();
+
+            if (!password) {
+                showError(deleteError, 'Password is required.');
+                return;
+            }
+
+            setButtonLoading(deleteButton, true);
+
+            // Begin deleting all related user data
+            try {
+                const user = auth.currentUser;
+                if (user) {
+                console.log("Your current request.auth.uid is:", user.uid);
+                } else {
+                console.log("No user is signed in. request.auth will be null.");
+                }
+
+                if (!user || !user.email) {
+                    throw new Error('No authenticated user');
+                }
+
+                // Re-authenticate user
+                const credential = EmailAuthProvider.credential(user.email, password);
+                await reauthenticateWithCredential(user, credential);
+
+                // Delete user data from Firestore
+                // const batch = writeBatch(db);
+                const uid = user.uid;  
+                console.log(`Starting account deletion for user: ${uid}`);
+
+                // Delete Firebase Auth account
+                // firbase cloud OnDelete trigger will handle all Firestore and Storage cleanup, so we only need to delete the user here
+                await deleteUser(user);
+                console.log(`Firebase Auth account deleted for user: ${uid}`);
+                
+            //     try {
+            //     const testRef = doc(db, 'clubs', 'ANY_REAL_CLUB_ID', 'members', 'ANY_REAL_MEMBER_ID');
+            //     await getDoc(testRef);
+            //     console.log('Firestore access test succeeded.');
+            //     } catch (testErr) {
+            //         console.error(`Firestore access test failed: ${testErr}`);
+            //         throw new Error('Failed to access Firestore. Aborting deletion.');
+            //     }
+
+            //     // 1. Delete user subcollections
+            //     const userDocRef = doc(db, 'users', uid);
+            //     console.log(userDocRef);
+            //     const subcollections = ['checkedInEvents', 'fcmTokens', 'favoriteCompanies', 'joinedClubs'];
+                
+            //     for (const subcol of subcollections) {
+            //         const subcolRef = collection(userDocRef, subcol);
+            //         const snapshot = await getDocs(subcolRef);
+                    
+            //         if (!snapshot.empty) {
+            //             const batch = writeBatch(db);
+            //             snapshot.docs.forEach((document) => {
+            //                 batch.delete(document.ref);
+            //             });
+            //             await batch.commit();
+            //             console.log(`Deleted ${snapshot.size} docs from users/${uid}/${subcol}`);
+            //         }
+            //     }
+
+            //     // 2. Remove user from all club memberships (collectionGroup query)
+            //     console.log("Removing user from club memberships...");
+            //     console.log(uid + "-----------------");
+            //     const clubMembershipsQuery = query(
+            //         collectionGroup(db, 'members'),
+            //         where('uid', '==', uid)
+            //     );
+            //     console.log(clubMembershipsQuery);
+
+            //     try{
+
+            //     const clubMemberships = await getDocs(clubMembershipsQuery);
+                    
+            //     console.log(`Found ${clubMemberships.size} club memberships for user ${uid}`);
+            //     if (!clubMemberships.empty) {
+            //         const batch = writeBatch(db);
+            //         clubMemberships.docs.forEach((document) => {
+            //             batch.delete(document.ref);
+            //         });
+            //         await batch.commit();
+            //         console.log(`Removed user from ${clubMemberships.size} club memberships`);
+            //     }
+            //     } catch (clubErr) {
+            //         console.error(`Error removing user from club memberships: ${clubErr}`);
+            //     }
+
+            //     // 3. Remove user from all event attendance records
+            //     const eventAttendanceQuery = query(
+            //         collectionGroup(db, 'attending'),
+            //         where('uid', '==', uid)
+            //     );
+
+            //     try{
+            //     const eventAttendance = await getDocs(eventAttendanceQuery);
+                
+            //     if (!eventAttendance.empty) {
+            //         const batch = writeBatch(db);
+            //         eventAttendance.docs.forEach((document) => {
+            //             batch.delete(document.ref);
+            //         });
+            //         await batch.commit();
+            //         console.log(`Removed user from ${eventAttendance.size} event attendance records`);
+            //     }
+            // } catch (eventErr) {
+            //     console.error(`Error removing user from event attendance records: ${eventErr}`);
+            // }
+
+            //     // 4. Delete notifications targeted at this user
+            //     try{
+            //         const notificationsQuery = query(
+            //             collection(db, 'notifications'),
+            //             where('targetType', '==', 'user'),
+            //             where('targetId', '==', uid)
+            //         );
+            //         const userNotifications = await getDocs(notificationsQuery);
+                    
+            //         if (!userNotifications.empty) {
+            //             const batch = writeBatch(db);
+            //             userNotifications.docs.forEach((document) => {
+            //                 batch.delete(document.ref);
+            //             });
+            //             await batch.commit();
+            //             console.log(`Deleted ${userNotifications.size} notifications for user`);
+            //         }
+            // }catch (notifErr) {
+            //     console.error(`Error deleting user notifications: ${notifErr}`);
+            // }
+            //     // 5. Delete profile picture from Storage
+            //     try {
+            //         const profilePicRef = storageRef(storage, `profile_pictures/${uid}.jpg`);
+            //         await deleteObject(profilePicRef);
+            //         console.log(`Deleted profile picture for user ${uid}`);
+            //     } catch (storageErr) {
+            //         // Profile picture might not exist, that's okay
+            //         console.log(`No profile picture to delete for user ${uid}`);
+            //     }
+
+            //     // 6. Delete user document
+            //     await deleteDoc(userDocRef);
+            //     console.log(`Deleted user document: ${uid}`);
+
+                console.log(`Successfully cleaned up all data for user: ${uid}`);
+
+                // Show success and redirect to sign in
+                showCard(signInCard);
+                showSuccess(signInError, 'Account deleted successfully.');
+                setTimeout(() => hideSuccess(signInError), 5000);
+
+            } catch (error) {
+                let message = 'Failed to delete account.';
+                
+                if (error.code === 'auth/wrong-password') {
+                    message = 'Password is incorrect.';
+                } else if (error.code === 'auth/requires-recent-login') {
+                    message = 'Please sign out and sign in again before deleting your account.';
+                } else if (error.code === 'auth/invalid-credential') {
+                    message = 'Invalid password.';
+                }
+                
+                showError(deleteError, message);
+                setButtonLoading(deleteButton, false);
+            }
+        });
+
+        // Sign Out
+        signOutButton.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                showCard(signInCard);
+            } catch (error) {
+                showError(accountError, 'Failed to sign out.');
+            }
+        });
+    </script>
+</body>
+</html>
