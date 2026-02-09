@@ -629,7 +629,7 @@
         import { getFirestore, doc, getDoc, deleteDoc, collection, getDocs, writeBatch } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
         import { getStorage, ref as storageRef, deleteObject } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
         import { collectionGroup, query, where } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-        // import { getAuth } from "firebase/auth";
+        import { initializeAppCheck, ReCaptchaV3Provider } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check.js';
 
         // ⚠️ IMPORTANT: Replace with your actual Firebase config
         const firebaseConfig = {
@@ -647,6 +647,16 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         const storage = getStorage(app);
+
+        try {
+            const appCheck = initializeAppCheck(app, {
+                provider: new ReCaptchaV3Provider('6LfPImYsAAAAAN_e268QSEZ08LjyJ8z6PTZSNC5p'),
+                isTokenAutoRefreshEnabled: true
+            });
+            console.log('App Check initialized successfully');
+        } catch (error) {
+            console.error('App Check initialization failed:', error);
+        }
 
         // DOM Elements
         const signInCard = document.getElementById('signInCard');
@@ -702,6 +712,7 @@
             element.classList.remove('show');
             setTimeout(() => element.textContent = '', 300);
         }
+        
 
         function setButtonLoading(button, loading) {
             if (loading) {
@@ -902,114 +913,6 @@
                 await deleteUser(user);
                 console.log(`Firebase Auth account deleted for user: ${uid}`);
                 
-            //     try {
-            //     const testRef = doc(db, 'clubs', 'ANY_REAL_CLUB_ID', 'members', 'ANY_REAL_MEMBER_ID');
-            //     await getDoc(testRef);
-            //     console.log('Firestore access test succeeded.');
-            //     } catch (testErr) {
-            //         console.error(`Firestore access test failed: ${testErr}`);
-            //         throw new Error('Failed to access Firestore. Aborting deletion.');
-            //     }
-
-            //     // 1. Delete user subcollections
-            //     const userDocRef = doc(db, 'users', uid);
-            //     console.log(userDocRef);
-            //     const subcollections = ['checkedInEvents', 'fcmTokens', 'favoriteCompanies', 'joinedClubs'];
-                
-            //     for (const subcol of subcollections) {
-            //         const subcolRef = collection(userDocRef, subcol);
-            //         const snapshot = await getDocs(subcolRef);
-                    
-            //         if (!snapshot.empty) {
-            //             const batch = writeBatch(db);
-            //             snapshot.docs.forEach((document) => {
-            //                 batch.delete(document.ref);
-            //             });
-            //             await batch.commit();
-            //             console.log(`Deleted ${snapshot.size} docs from users/${uid}/${subcol}`);
-            //         }
-            //     }
-
-            //     // 2. Remove user from all club memberships (collectionGroup query)
-            //     console.log("Removing user from club memberships...");
-            //     console.log(uid + "-----------------");
-            //     const clubMembershipsQuery = query(
-            //         collectionGroup(db, 'members'),
-            //         where('uid', '==', uid)
-            //     );
-            //     console.log(clubMembershipsQuery);
-
-            //     try{
-
-            //     const clubMemberships = await getDocs(clubMembershipsQuery);
-                    
-            //     console.log(`Found ${clubMemberships.size} club memberships for user ${uid}`);
-            //     if (!clubMemberships.empty) {
-            //         const batch = writeBatch(db);
-            //         clubMemberships.docs.forEach((document) => {
-            //             batch.delete(document.ref);
-            //         });
-            //         await batch.commit();
-            //         console.log(`Removed user from ${clubMemberships.size} club memberships`);
-            //     }
-            //     } catch (clubErr) {
-            //         console.error(`Error removing user from club memberships: ${clubErr}`);
-            //     }
-
-            //     // 3. Remove user from all event attendance records
-            //     const eventAttendanceQuery = query(
-            //         collectionGroup(db, 'attending'),
-            //         where('uid', '==', uid)
-            //     );
-
-            //     try{
-            //     const eventAttendance = await getDocs(eventAttendanceQuery);
-                
-            //     if (!eventAttendance.empty) {
-            //         const batch = writeBatch(db);
-            //         eventAttendance.docs.forEach((document) => {
-            //             batch.delete(document.ref);
-            //         });
-            //         await batch.commit();
-            //         console.log(`Removed user from ${eventAttendance.size} event attendance records`);
-            //     }
-            // } catch (eventErr) {
-            //     console.error(`Error removing user from event attendance records: ${eventErr}`);
-            // }
-
-            //     // 4. Delete notifications targeted at this user
-            //     try{
-            //         const notificationsQuery = query(
-            //             collection(db, 'notifications'),
-            //             where('targetType', '==', 'user'),
-            //             where('targetId', '==', uid)
-            //         );
-            //         const userNotifications = await getDocs(notificationsQuery);
-                    
-            //         if (!userNotifications.empty) {
-            //             const batch = writeBatch(db);
-            //             userNotifications.docs.forEach((document) => {
-            //                 batch.delete(document.ref);
-            //             });
-            //             await batch.commit();
-            //             console.log(`Deleted ${userNotifications.size} notifications for user`);
-            //         }
-            // }catch (notifErr) {
-            //     console.error(`Error deleting user notifications: ${notifErr}`);
-            // }
-            //     // 5. Delete profile picture from Storage
-            //     try {
-            //         const profilePicRef = storageRef(storage, `profile_pictures/${uid}.jpg`);
-            //         await deleteObject(profilePicRef);
-            //         console.log(`Deleted profile picture for user ${uid}`);
-            //     } catch (storageErr) {
-            //         // Profile picture might not exist, that's okay
-            //         console.log(`No profile picture to delete for user ${uid}`);
-            //     }
-
-            //     // 6. Delete user document
-            //     await deleteDoc(userDocRef);
-            //     console.log(`Deleted user document: ${uid}`);
 
                 console.log(`Successfully cleaned up all data for user: ${uid}`);
 
