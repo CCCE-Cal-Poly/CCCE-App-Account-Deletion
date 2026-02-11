@@ -787,12 +787,12 @@
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 
-                // if (!userCredential.user.emailVerified) {
-                //     showError(signInError, 'Please verify your email before signing in.');
-                //     await signOut(auth);
-                //     setButtonLoading(signInButton, false);
-                //     return;
-                // }
+                if (!userCredential.user.emailVerified) {
+                    showError(signInError, 'Please verify your email before signing in.');
+                    await signOut(auth);
+                    setButtonLoading(signInButton, false);
+                    return;
+                }
 
                 // Success - will be handled by auth state observer
             } catch (error) {
@@ -918,11 +918,6 @@
             // Begin deleting all related user data
             try {
                 const user = auth.currentUser;
-                if (user) {
-                console.log("Your current request.auth.uid is:", user.uid);
-                } else {
-                console.log("No user is signed in. request.auth will be null.");
-                }
 
                 if (!user || !user.email) {
                     throw new Error('No authenticated user');
@@ -935,15 +930,14 @@
                 // Delete user data from Firestore
                 // const batch = writeBatch(db);
                 const uid = user.uid;  
-                console.log(`Starting account deletion for user: ${uid}`);
+  
 
                 // Delete Firebase Auth account
                 // firbase cloud OnDelete trigger will handle all Firestore and Storage cleanup, so we only need to delete the user here
                 await deleteUser(user);
-                console.log(`Firebase Auth account deleted for user: ${uid}`);
                 
 
-                console.log(`Successfully cleaned up all data for user: ${uid}`);
+                console.log(`Successfully cleaned up all data for user`);
 
                 // Show success and redirect to sign in
                 showCard(signInCard);
