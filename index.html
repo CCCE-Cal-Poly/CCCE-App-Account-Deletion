@@ -655,6 +655,35 @@
             });
             console.log('App Check initialized successfully');
         } catch (error) {
+            document.body.innerHTML = `
+                    <div style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        min-height: 100vh;
+                        background: #154734;
+                        color: #F5E6D3;
+                        font-family: 'Source Serif 4', serif;
+                        text-align: center;
+                        padding: 2rem;
+                    ">
+                        <div>
+                            <h1 style="font-size: 2rem; margin-bottom: 1rem;">Security Verification Failed</h1>
+                            <p style="margin-bottom: 1rem;">We couldn't verify your browser's security settings.</p>
+                            <p style="font-size: 0.9rem; opacity: 0.8;">Please ensure cookies are enabled and try refreshing the page.</p>
+                            <button onclick="location.reload()" style="
+                                margin-top: 2rem;
+                                padding: 1rem 2rem;
+                                background: #D4AF37;
+                                border: none;
+                                cursor: pointer;
+                                font-size: 1rem;
+                                font-weight: bold;
+                            ">Retry</button>
+                        </div>
+                    </div>
+                `;
+                throw new Error('App Check required for production');
             console.error('App Check initialization failed:', error);
         }
 
